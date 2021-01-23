@@ -1,22 +1,21 @@
 package books;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-public class Book {
+
+
+
+public class Book implements Comparable<Book> {
 
 	private String title;
 	private String author;
 	private int year;
-	
+
 	public Book(String title, String author, int year) {
 		super();
 		this.title = title;
@@ -40,31 +39,49 @@ public class Book {
 	public String toString() {
 		return title + "by" + author + "(" + year + ")";
 	}
-	
-	public static List<Book> getList(String file){
+
+	public static List<Book> getList(String file) {
 		List<Book> list = new ArrayList<>();
 		String line;
-		String[] attributes = null;
-		
-		try{
+		String[] attributes;
+
+		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
-			line = br.readLine();
-			while(line != null) {
-				attributes= line.split(",");
-				String nameOfBook = attributes[0];
-				String authorOfBook = attributes[1];
-				String yearOfBook = attributes[2];
-				Book b = new Book(nameOfBook, authorOfBook, Integer.valueOf(yearOfBook));
-				System.err.println("Problem reading in \"" + attributes + "\"");
-				list.add(b);
+			Scanner s = new Scanner(br);
+			while (s.hasNext()) {
+				line = s.nextLine();
+				attributes = line.split(",");
+				if (attributes.length == 3) {
+					String nameOfBook = attributes[0];
+					String authorOfBook = attributes[1];
+					String yearOfBook = attributes[2];
+					if (isNumber(yearOfBook)) {
+						Book b = new Book(nameOfBook, authorOfBook, Integer.valueOf(yearOfBook));
+						list.add(b);
+					}
+				}
+				else {
+					System.err.println("Problem reading in \"" + line + "\"");
+				}
 			}
 		} catch (IOException e) {
-			
-			//e.printStackTrace();
+			System.err.print(e);
 		}
 		return list;
-		
+
 	}
-	
-	
+
+	private static boolean isNumber(String s) {
+		for (int i = 0; i < s.length(); i++)
+			if (Character.isDigit(s.charAt(i)) == false)
+				return false;
+
+		return true;
+	}
+
+	@Override
+	public int compareTo(Book o) {
+		return this.getTitle().compareTo(o.getTitle());
+	}
+
 }
