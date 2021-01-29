@@ -1,5 +1,6 @@
-package A01;
+package a01;
 
+import a01.Percolation;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 /**
@@ -133,3 +134,4 @@ public class Percolation {
 		System.out.println();
 	}
 }
+
