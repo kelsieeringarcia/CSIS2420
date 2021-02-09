@@ -1,12 +1,14 @@
 package ceLinked;
 
+import java.util.Iterator;
+
 /**
  * WordList is a singly-linked list of Strings. It is designed as a practice
  * opportunity to learn how to manipulate linked structures.
  * 
  * @author Kelsie Garcia
  */
-public class WordList {
+public class WordList implements Iterable<String>{
 	private Node head; // first node of the list or null
 	private Node tail; // last node of the list or null
 	private int n; // number of words in the list
@@ -18,6 +20,14 @@ public class WordList {
 	private class Node {
 		private String item;
 		private Node next;
+		
+		public String getItem() {
+			return item;
+		}
+		
+		public Node getNext() {
+			return next;
+		}
 	}
 
 	/**
@@ -173,7 +183,37 @@ public class WordList {
 
 		System.out.println("list: " + list);
 		System.out.println("size: " + list.size());
+		
+		System.out.println("List elements printed with a foreach loop:");
+		for (String i : list) {
+            System.out.println(i + " Is a word in the list");
+        }
 
 	}
 
+	@Override
+	public Iterator<String> iterator() {
+		return new ListIterator(this);
+	}
+	
+	private class ListIterator implements Iterator<String>{
+		Node pointer;
+		
+		ListIterator(WordList word){
+		pointer = word.head;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return pointer.next != null;
+		}
+
+		@Override
+		public String next() {
+			String data = (String) pointer.item;
+			pointer = pointer.getNext();
+			return data;
+		}
+		
+	}
 }
