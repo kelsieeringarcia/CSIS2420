@@ -25,8 +25,8 @@ public class Recursion {
 	}
 	
 	public static void main(String args[]) {
-		hailstone(5);
-		System.out.println();
+		System.out.println("Hailstone Numbers:");
+		System.out.println("-------------------");
 		hailstone(3);
 		System.out.println();
 		hailstone(16);
@@ -34,6 +34,7 @@ public class Recursion {
 		hailstone(17);
 		System.out.println();
 		hailstone(24);
+
 	}
 
 }
