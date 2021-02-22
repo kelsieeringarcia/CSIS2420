@@ -3,7 +3,6 @@ package a02;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import edu.princeton.cs.algs4.Selection;
 
 /**
  * A double-ended queue or deque. Items can be added or removed on either end.
@@ -116,9 +115,17 @@ public class Deque<Item> implements Iterable<Item> {
 	 */
 	public Item removeFirst() {
 		if (isEmpty()) {
-			throw new IllegalArgumentException("Cannot remove anything from an empty deque.");
+			throw new NoSuchElementException("Cannot remove anything from an empty deque.");
 		}
 		Node<Item> newNode = new Node<Item>();
+		if(n == 1) {
+			newNode = head;
+			head = head.next;
+			tail = head;
+			n--;
+			return newNode.item;
+		}
+		
 		newNode = head;
 		head = head.next;
 		head.prev = null;
@@ -134,9 +141,16 @@ public class Deque<Item> implements Iterable<Item> {
 	 */
 	public Item removeLast() {
 		if (isEmpty()) {
-			throw new IllegalArgumentException("Cannot remove anything from an empty deque.");
+			throw new NoSuchElementException("Cannot remove anything from an empty deque.");
 		}
 		Node<Item> newNode = new Node<Item>();
+		if(n == 1) {
+			newNode = tail;
+			tail = tail.prev;
+			head = tail;
+			n--;
+			return newNode.item;
+		}
 		newNode = tail;
 		tail = tail.prev;
 		tail.next = null;
@@ -144,18 +158,24 @@ public class Deque<Item> implements Iterable<Item> {
 		return newNode.item;
 	}
 
+	/**
+	 * TESTING CLIENT 
+	 */
 	public static void main(String[] args) {
 		Deque<Integer> q = new Deque<>();
-		q.addFirst(0);
-		q.addFirst(1);
-		q.addFirst(2);
-		q.addLast(1);
-		q.removeFirst();
+		q.addLast(0);
+		
+		q.removeLast();
+		System.out.println(q.isEmpty());
+//		q.addFirst(1);
+//		q.addFirst(2);
+//		q.addLast(1);
+//		q.removeFirst();
 //		q.addLast(2);
 //		q.addFirst(3);
 //		q.addLast(4);
 //		q.addLast(5);
-		q.removeLast();
+//		q.removeLast();
 		System.out.println("Size: " + q.size());
 		for (Integer el : q) {
 			System.out.println(el);
