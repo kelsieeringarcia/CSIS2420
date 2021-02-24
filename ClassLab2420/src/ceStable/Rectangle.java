@@ -1,8 +1,11 @@
 package ceStable;
 
+import java.util.Comparator;
+
 public class Rectangle implements Comparable<Rectangle> {
 	private int length;
 	private int width;
+	static final Comparator<Rectangle> BY_AREA = new CompareByArea();
 	
 	public Rectangle(int length, int width) {
 		super();
@@ -19,21 +22,30 @@ public class Rectangle implements Comparable<Rectangle> {
 	}
 	
 	public int perimeter() {
-		return 0;//TODO
+		return 2 * (width + length);
 	}
 	
 	public int area() {
-		return 0; //TODO
+		return length * width; 
 	}
 
 	@Override
 	public String toString() {
-		return "[length " + length + "x width" + width + "]";
+		return "[" + length + "x" + width + "]";
 	}
 
 	@Override
 	public int compareTo(Rectangle o) {
 		return this.getLength() - o.getLength();
+	}
+	
+	public static class CompareByArea implements Comparator<Rectangle> {
+		
+		@Override
+		public int compare(Rectangle o1, Rectangle o2) {
+			return o1.area() - o2.area();
+		}
+		
 	}
 	
 
