@@ -4,7 +4,8 @@ public class Autocomplete {
 
 	// Initialize the data structure from the given array of terms.
     public Autocomplete(Term[] terms) {
-    	
+    	if (terms == null) 
+    		throw new NullPointerException("Terms array cannot be null");
     }
     
     // Return all terms that start with the given prefix, in descending order of weight.
