@@ -50,6 +50,20 @@ public class Term implements Comparable<Term>{
 	}
 	
 	
+	/**
+	 * @return the query
+	 */
+	public String getQuery() {
+		return query;
+	}
+
+	/**
+	 * @return the weight
+	 */
+	public double getWeight() {
+		return weight;
+	}
+
 	// Compare the terms in lexicographic order by query.
 	@Override
 	public int compareTo(Term that) {
@@ -87,10 +101,11 @@ public class Term implements Comparable<Term>{
         	int tTwo = t2.query.length();
 
         	int len = tOne < tTwo ? tOne : tTwo;
-        	len = len < r ? len : r;
-        	
-        	String sOne = t1.query.substring(0,len);
-        	String sTwo = t2.query.substring(0,len);
+
+        	if(len < r) return -1;
+
+        	String sOne = t1.query.substring(0,r);
+        	String sTwo = t2.query.substring(0,r);
        	
         	if(sOne.compareToIgnoreCase(sTwo) < 0) {
         		return -1;
@@ -102,22 +117,5 @@ public class Term implements Comparable<Term>{
         }
     }
     
-//    public static void main(String[] args) {
-//    	Term t1 = new Term("Apple", 1.0);
-//    	Term t2 = new Term("Appmes", 2.0);
-//    	Term t3 = new Term("Banana", 3.0);
-//    	
-//    	Term[] terms = {t2,t1,t3};
-//    	for(Term el : terms) {
-//    		System.out.print(el + " || ");
-//    	}
-//    	System.out.println();
-//    	System.out.println();
-//    	Collections.sort(Arrays.asList(terms), Term.byPrefixOrder(4));
-//    	for(Term el : terms) {
-//    		System.out.print(el + " || ");
-//    	}
-//    	
-//    }
 
 }
