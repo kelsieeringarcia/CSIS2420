@@ -1,6 +1,5 @@
 package a04;
 
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
@@ -21,7 +20,13 @@ public class Solver {
         private SearchNode prev;
         private int priority;
 
-
+        /**
+         * This constructs a search node with a current board, previous board, and 
+         * the current moves used to get to that board.
+         * @param b
+         * @param prev
+         * @param moves
+         */
         public SearchNode(Board b, SearchNode prev, int moves) {
             this.moves = moves;
             board = b;
@@ -42,43 +47,47 @@ public class Solver {
 		}
     }
 	
-	// find a solution to the initial board (using the A* algorithm)
-	public Solver(Board initial) {
-		if(!initial.isSolvable()) throw new IllegalArgumentException("Board is not solvable.");
-		int boardSize = initial.size() * initial.size();
-		MinPQ<SearchNode> pq = new MinPQ<>();
-		pq.insert(new SearchNode(initial,null,0));
-		
-		
-//		Integer[] arr = new Integer[boardSize];
-//		for(int i = 0; i < boardSize - 1; i++) {
-//			arr[i] = i + 1;
-//		}
-//		arr[boardSize - 1] = 0;
-//
-//		Board goalBoard = new Board(arr);
-		
-		SearchNode initialNode = pq.delMin();
-		while(!initialNode.board.isGoal()) {
-			Iterable<Board> neighbors = initialNode.board.neighbors();
+	/**
+	 * This method is used to find a solution to the initial board 
+	 * (using the A* algorithm)
+	 * 
+	 * @param initial
+	 */
+    public Solver(Board initial) {
+        if(!initial.isSolvable()) throw new IllegalArgumentException("Board is not solvable.");
+        MinPQ<SearchNode> pq = new MinPQ<>();
+        pq.insert(new SearchNode(initial,null,0));
+        
+        SearchNode initialNode = pq.delMin();
+        while(!initialNode.board.isGoal()) {
+            Iterable<Board> neighbors = initialNode.board.neighbors();
 
-			while(neighbors.iterator().hasNext()) {
-				Board temp = neighbors.iterator().next();
-				pq.insert(new SearchNode(temp, initialNode, initialNode.moves + 1));
-			}
-			initialNode = pq.delMin();
-		}
-		if(initialNode.board.isGoal()) {
-			solved = initialNode;
-		}
-	}
+            for(Board el : neighbors) {
+                pq.insert(new SearchNode(el, initialNode, initialNode.moves + 1));
+            }
+
+            initialNode = pq.delMin();
+        }
+        if(initialNode.board.isGoal()) {
+            solved = initialNode;
+        }
+    }
 	
-	// min number of moves to solve initial board
+	/**
+	 * A minimum number of moves to solve initial board
+	 * @return the number of moves
+	 */
 	public int moves() {
+		if(!solved.board.isSolvable()) {
+			return -1;
+		}
 		return solved.moves;
 	}
 	
-	// sequence of boards in a shortest solution
+	/**
+	 * A sequence of boards in a shortest solution
+	 * @return 
+	 */
 	public Iterable<Board> solution(){
 		Stack<Board> s = new Stack<Board>();
 		for(SearchNode i = solved; i != null; i = i.prev) {
@@ -87,21 +96,18 @@ public class Solver {
 		return s;
 	}
 	
+	/**
+	 * TEST CLIENT
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		//Integer[] testArr = {1,2,3,4,5,6,7,8,0};
-		Integer[] testArr = {0,1,3,4,2,5,7,8,6};
-//		Board b = new Board(testArr);
-//		
-//		Solver s = new Solver(b);
-//		System.out.println(s.moves());
+//		Integer[] testArr = {1,2,3,4,5,6,8,7,0};
+//		Integer[] testArr = {0,1,3,4,2,5,7,8,6};
+//		int[][] testArr = { { 1, 2, 3, 4 }, { 5, 6, 0, 8 }, { 9, 10, 7, 11 }, { 13, 14, 15, 12 } };
+		Integer[] testArr = {1,0,3,2};
 	
-	    // create initial board from file
-//	    In in = new In(args[0]);
-//	    int N = in.readInt();
-//	    int[][] blocks = new int[N][N];
-//	    for (int i = 0; i < N; i++)
-//	        for (int j = 0; j < N; j++)
-//	            blocks[i][j] = in.readInt();
+	
 	    Board initial = new Board(testArr);
 
 	    // check if puzzle is solvable; if so, solve it and output solution
