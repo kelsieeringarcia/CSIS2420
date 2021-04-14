@@ -1,7 +1,12 @@
 package a05;
 
 import edu.princeton.cs.algs4.RedBlackBST;
-
+/**
+ * 
+ * @author Kelsie Garcia and Chad Zuniga
+ *
+ * @param <Value>
+ */
 public class PointST<Value> {
 
 	private RedBlackBST<Point2D,Value> rb;
