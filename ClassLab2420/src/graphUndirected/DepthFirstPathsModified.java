@@ -3,6 +3,7 @@ package graphUndirected;
 import java.io.File;
 
 import edu.princeton.cs.algs4.DepthFirstPaths;
+import edu.princeton.cs.algs4.*;
 import edu.princeton.cs.algs4.Graph;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Stack;
@@ -10,7 +11,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class DepthFirstPathsModified {
     private boolean[] marked;    // marked[v] = is there an s-v path?
-    private int[] edgeTo;        // edgeTo[v] = last edge on s-v path
+    private static int[] edgeTo;        // edgeTo[v] = last edge on s-v path
     private final int s;         // source vertex
 
     /**
@@ -91,21 +92,24 @@ public class DepthFirstPathsModified {
         
         System.out.println("Adjacency List:");
         System.out.println("---------------");
-        for (int v = 0; v < G.V(); v++) {
-            if (dfs.hasPathTo(v)) {
-            	G.addEdge(v, s);
-                StdOut.printf("%d:  ", v);
-//                for (int x : dfs.pathTo(v)) {
-//                    if (x == s) StdOut.print(x);
-//                    else        StdOut.print("-" + x);
-//                }
-                StdOut.println();
-            }
+        for(int i = 0; i < G.V(); i++) {
+        	System.out.print(i+": ");
+        	for(int h:G.adj(i)) {
+        		System.out.print(" ->" + h);
+        	}
+        	System.out.println();
+        }
+        System.out.println();
 
-            else {
-                StdOut.printf("%d to %d:  not connected\n", s, v);
-            }
+        System.out.println("      marked edgeTo");
+        System.out.println("      ------ ------");
+        for(int i = 0; i < G.V(); i++) {
+        	System.out.print(i );
+        	System.out.print("\t" + dfs.hasPathTo(i));
+        	System.out.print(edgeTo[i]);
+        
 
+        	System.out.println();
         }
         
         System.out.println("Original Output: ");

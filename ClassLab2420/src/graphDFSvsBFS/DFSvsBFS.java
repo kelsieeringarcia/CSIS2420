@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import edu.princeton.cs.algs4.Graph;
+import edu.princeton.cs.algs4.In;
 
 public class DFSvsBFS {
 
@@ -14,18 +15,21 @@ public class DFSvsBFS {
 
 		File filename = new File(
 				"//Users//kelsiegarcia//Documents//gitHub//CSIS-2420//ClassLab2420//src//graphDFSvsBFS//SimpleGraph.txt");
-		Scanner sc = new Scanner(filename);
-		Graph g = new Graph(sc.nextInt());
-		while (sc.hasNextLine()) {
+		In in = new In(filename);
+		Graph g = new Graph(in);
 
-			g.addEdge(sc.nextInt(), sc.nextInt());
 
-		}
-		sc.close();
 
-		System.out.println("Adjacency List:");
-		System.out.println("---------------");
-		System.out.println(g);
+        System.out.println("Adjacency List:");
+        System.out.println("---------------");
+        for(int i = 0; i < g.V(); i++) {
+        	System.out.print(i+": ");
+        	for(int h : g.adj(i)) {
+        		System.out.print(h + " ->");
+        	}
+        	System.out.println();
+        }
+        System.out.println();
 
 	}
 }
