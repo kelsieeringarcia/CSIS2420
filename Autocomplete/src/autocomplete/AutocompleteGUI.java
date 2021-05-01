@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
@@ -71,11 +71,6 @@ public class AutocompleteGUI extends JFrame {
 		suggestionPanel.setBounds(35, 92, 290, 175);
 		contentPane.add(suggestionPanel);
 		suggestionPanel.setLayout(null);
-//		list = new JList();
-//		list.setBounds(6, 6, 278, 113);
-//		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		list.setVisibleRowCount(10);
-		//suggestionPanel.add(list);
 		suggestionPanel.setVisible(false);
 		
 		
@@ -86,7 +81,14 @@ public class AutocompleteGUI extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				String search = e.toString();
 				if(!search.equals("") ) {
-					if(e.getKeyText(e.getKeyCode()).equals("⌫")) {
+					if(e.getKeyText(e.getKeyCode()).equals("⌫")
+							|| e.getKeyText(e.getKeyCode()).equals("⇧")
+							|| e.getKeyText(e.getKeyCode()).equals("␣")
+							|| e.getKeyText(e.getKeyCode()).equals("←")
+							|| e.getKeyText(e.getKeyCode()).equals("→")
+							|| e.getKeyText(e.getKeyCode()).equals("↓")
+							|| e.getKeyText(e.getKeyCode()).equals("↑")
+							|| e.getKeyText(e.getKeyCode()).equals("⌘")) {
 						if(word.length() <= 1) {
 							word.setLength(0);
 							suggestionPanel.setVisible(false);
@@ -101,27 +103,17 @@ public class AutocompleteGUI extends JFrame {
 
 					}
 					
-
-					//System.out.println(e.getKeyText(e.getKeyCode()));
 				}
 				
 				
 			}
 
 			private void showSearchOptions(AutoComplete ac) {
-				String[] words = ac.autoCompleteFromWord(word.toString(), 10);
-				System.out.println(word.toString() + " ----");
-					for(String el : words) {
-						System.out.println(el);
-					}
+				List<String> words = ac.autoCompleteFromWord(word.toString(), 10);
+
 				@SuppressWarnings({ "unchecked", "rawtypes" })
-				JList list = new JList(words);
+				JList list = new JList(words.toArray());
 				suggestionPanel.add(list);
-				
-//					JScrollPane sc = new  JScrollPane(list);
-//					sc.setViewportView(list);
-//					list.setLayoutOrientation(JList.VERTICAL);
-//					suggestionPanel.add(sc);
 				list.setBounds(6, 6, 278, 200);
 				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				list.setVisibleRowCount(10);
@@ -137,26 +129,13 @@ public class AutocompleteGUI extends JFrame {
 		searchButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//list = new JList(ac.autoCompleteFromWord(word, 10));
-//				String[] words = ac.autoCompleteFromWord(word.toString(), 10);
-//				//System.out.println(word.toString() + " ----");
-//				for(String el : words) {
-//					System.out.println(el);
-//				}
-//				JList list = new JList(words);
-//				suggestionPanel.add(list);
-//				list.setBounds(6, 6, 278, 113);
-//				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//				list.setVisibleRowCount(10);
-//				suggestionPanel.setVisible(true);
-//				list.setVisible(true);
 				int results = JOptionPane.YES_NO_OPTION;
-//				JOptionPane.showConfirmDialog(null, "Do you wish to add this word?","Word not found!", results);
 				if(JOptionPane.showConfirmDialog(null, "Do you wish to add this word?","Word not found!", results) == JOptionPane.YES_OPTION) {
 					suggestionPanel.setVisible(false);
 					ac.insertIntoWordList(word.toString());
 					word.setLength(0);
 					textField.setText("");
+					ac.refreshWordFileOnDestroy();
 				}else {
 					textField.setText("");
 					word.setLength(0);

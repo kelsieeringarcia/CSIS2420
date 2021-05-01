@@ -1,7 +1,9 @@
 package autocomplete;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Insertion;
@@ -15,7 +17,7 @@ import edu.princeton.cs.algs4.Out;
  * how often the word is used in books. The user can also add words to the list if it doesn't
  * exist, and will resave the file with the updated word.
  * 
- * @author chad.zuniga
+ * @author chad.zuniga and kelsie garcia
  */
 public class AutoComplete {	
 	private Word[] words;
@@ -51,6 +53,7 @@ public class AutoComplete {
 	 */
 	public AutoComplete() {
 		this.words = getWordsFromFile();
+		Arrays.sort(this.words);
 	}
 	
 	/**
@@ -62,15 +65,15 @@ public class AutoComplete {
 	 * @param numOfResults	int
 	 * @return
 	 */
-	public String[] autoCompleteFromWord(String userWord, int numOfResults) {
+	public List<String> autoCompleteFromWord(String userWord, int numOfResults) {
 		if(userWord.isEmpty() || userWord == null) throw new IllegalArgumentException("Word can not be null or empty");
 		if(numOfResults < 1) throw new IllegalArgumentException("Number of Results can not be less than 1");
 		this.userWord = userWord;
 		MaxPQ<Node> pq = new MaxPQ<>();
-		String[] result = new String[0];
-		
+		List<String> result = new ArrayList<>();
 		Word uw = new Word(userWord, 0);
 		int index = firstIndexOf(words, uw, Word.byPrefixOrder(userWord.length()));
+
 		if(index < 0) {
 			return result;
 		}
@@ -86,14 +89,16 @@ public class AutoComplete {
 				}
 			}
 			
-			//pq.forEach(x -> System.out.println(x.w.getWord()));
 		} catch(Exception e) {
 			System.out.println("does not exist in word list");
 		}
 
-		result = new String[numOfResults];
+
 		for(int i = 0; i < numOfResults; i++) {
-			result[i] = pq.delMax().w.getWord();
+
+			if(!pq.isEmpty()) {
+				result.add(pq.delMax().w.getWord());
+			}
 		}
 		return result;
 	}
@@ -117,7 +122,6 @@ public class AutoComplete {
 		Insertion.sort(words);
 		
 		fileSize++;
-		System.out.println("added userword:" + userWord);
 	}
 	
 	public void refreshWordFileOnDestroy() {
@@ -171,13 +175,13 @@ public class AutoComplete {
 		if(key == null) throw new NullPointerException("Key can not be null");
 		if(comparator == null) throw new NullPointerException("Key can not be null");
 
-		int index = Arrays.binarySearch(a, key, comparator);
-		
+		int index = Arrays.binarySearch(a, key);
+
 		while(index >= 0 && comparator.compare(a[index],key) == 0) {
 			if(index == 0) return 0;
 			index -= 1;
 		}
-		
+
 		return index >= 0 ? index += 1 : -1;
 	}
 

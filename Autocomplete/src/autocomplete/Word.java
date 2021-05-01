@@ -6,7 +6,7 @@ import java.util.Comparator;
  * Word class gives more functionality to strings by allowing the string value word
  * to be accompanied by a rank value.
  * 
- * @author chad.zuniga
+ * @author chad.zuniga and kelsie garcia
  */
 public class Word implements Comparable<Word>{
 
